@@ -24,5 +24,9 @@
   [self setBool:!firstTime forKey:@"appHasRun"];
 }
 
+- (NSString *)terminalScript {
+  return [self stringForKey:@"terminalScript"];
+}
+
 @end
 

@@ -9,6 +9,7 @@
 #import "ExecutablePlugin.h"
 #import "PluginManager.h"
 #import "NSTask+useSystemProxies.h"
+#import "NSUserDefaults+Settings.h"
 
 @implementation ExecutablePlugin
 
@@ -129,13 +130,16 @@
 
 - (void) runPluginExternally {
   
-  NSString* script = @"tell application \"Terminal\" \n\
-  do script \"%@\" \n\
-  activate \n\
-  end tell";
+  NSString* script = DEFS.terminalScript;
   
-  NSString *s = [NSString stringWithFormat:
-                 script, self.path];
+  if (!script) {
+    script = @"tell application \"Terminal\" \n\
+      do script \"%@\" \n\
+      activate \n\
+      end tell";
+  }
+  
+  NSString *s = [NSString stringWithFormat:script, self.path];
   NSAppleScript *as = [NSAppleScript.alloc initWithSource:s];
   [as executeAndReturnError:nil];
   

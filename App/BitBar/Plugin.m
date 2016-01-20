@@ -11,6 +11,7 @@
 #import "STPrivilegedTask.h"
 #import "NSDate+DateTools.h"
 #import "NSColor+Hex.h"
+#import "NSUserDefaults+Settings.h"
 
 #define DEFAULT_TIME_INTERVAL_SECONDS ((double)60.)
 
@@ -193,13 +194,18 @@
     } else {
 
       NSString *full_link = [NSString stringWithFormat:@"%@ %@ %@ %@ %@ %@", bash, param1, param2, param3, param4, param5];
-      NSString *s = [NSString stringWithFormat:@"tell application \"Terminal\" \n\
+      NSString *s = DEFS.terminalScript;
+      
+      if (!s) {
+        s = @"tell application \"Terminal\" \n\
                  activate \n\
                  if length of (get every window) is 0 then \n\
                  tell application \"System Events\" to tell process \"Terminal\" to click menu item \"New Window\" of menu \"File\" of menu bar 1 \n\
                  end if \n\
                  do script \"%@\" in front window activate \n\
-                 end tell", full_link];
+                 end tell";
+      }
+      s = [NSString stringWithFormat:s, full_link];
       NSAppleScript *as = [NSAppleScript.alloc initWithSource: s];
       [as executeAndReturnError:nil];
     }
