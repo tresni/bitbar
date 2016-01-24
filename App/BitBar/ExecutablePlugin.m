@@ -130,8 +130,8 @@
 - (void) runPluginExternally {
   
   NSString* script = @"tell application \"Terminal\" \n\
-  do script \"%@\" \n\
   activate \n\
+  do script quoted form of (POSIX path of \"%@\") \n\
   end tell";
   
   NSString *s = [NSString stringWithFormat:
